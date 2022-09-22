@@ -28,8 +28,10 @@ db.sequelize.authenticate()
 //Router
 const v1 = '/v1/be'
 const booksRouter = require("./router/books")
+const userRouter =require("./router/users")
 
 app.use(`${v1}`, booksRouter)
+app.use(`${v1}`, userRouter)
 
 app.get('/', (req, res) => {
     res.send("Selamat datang di book service manager");
