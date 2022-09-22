@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "tryuser",
+    "password": "cobauser",
+    "database": "booksmanagement",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "tryuser",
+    "password": "cobauser",
+    "database": "BooksManagement",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "tryuser",
+    "password": "cobauser",
+    "database": "BooksManagement",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
