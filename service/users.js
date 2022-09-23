@@ -8,6 +8,12 @@ const addUser = async (req)=> {
     return result
 }
 
+const getAllUser = async (req) => {
+    const result = await users.findAll()
+    return result
+}
+
 module.exports = {
-    addUser
+    addUser,
+    getAllUser
 }

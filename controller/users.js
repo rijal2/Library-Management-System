@@ -1,4 +1,4 @@
-const { addUser } = require('../service/users')
+const { addUser, getAllUser } = require('../service/users')
 
 const create = async (req, res, next) => {
     try {
@@ -13,6 +13,20 @@ const create = async (req, res, next) => {
     }
 }
 
+const index = async (req, res, next) => {
+    try {
+        const result = await getAllUser(req)
+
+        res.status(200).json({
+            msg: true,
+            data: result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
-    create
+    create,
+    index
 }
