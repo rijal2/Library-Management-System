@@ -21,7 +21,19 @@ const getAllBook = async (req) => {
 
 }
 
+const getBookById = async (req) => {
+    const { id } = req.params
+    const result = await Book.findByPk( id )
+
+    if(!result){
+        console.log(`Data dengan PK = ${id} tidak ditemukan`)
+    }
+
+    return result
+}
+
 module.exports = {
     addBook,
-    getAllBook
+    getAllBook,
+    getBookById
 }
