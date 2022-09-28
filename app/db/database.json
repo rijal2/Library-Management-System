@@ -3,20 +3,20 @@
     "username": "tryuser",
     "password": "cobauser",
     "database": "booksmanagement",
-    "host": "localhost",
+    "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "tryuser",
     "password": "cobauser",
-    "database": "BooksManagement",
+    "database": "booksmanagement",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
     "username": "tryuser",
     "password": "cobauser",
-    "database": "BooksManagement",
+    "database": "booksmanagement",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }

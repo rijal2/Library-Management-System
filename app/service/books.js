@@ -32,6 +32,15 @@ const getBookById = async (req) => {
     return result
 }
 
+const updateBook = async (req) => {
+    const { id } = req.params
+    const { title, description, year, author, publisher } = req.body
+
+    const result = await users.find()
+
+
+}
+
 module.exports = {
     addBook,
     getAllBook,

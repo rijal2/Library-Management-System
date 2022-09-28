@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 //Connect to database
-const db = require('./models')
+const db = require('./app/api/v1/database/models/index')
 // console.log(db.sequelize)
 db.sequelize.authenticate()
     .then(() => {
@@ -26,12 +26,12 @@ db.sequelize.authenticate()
     })
 
 //Router
-const v1 = '/v1/be'
-const booksRouter = require("./router/books")
-const userRouter =require("./router/users")
+// const v1 = '/v1/be'
+// const booksRouter = require("./router/books")
+// const userRouter =require("./router/users")
 
-app.use(`${v1}`, booksRouter)
-app.use(`${v1}`, userRouter)
+// app.use(`${v1}`, booksRouter)
+// app.use(`${v1}`, userRouter)
 
 app.get('/', (req, res) => {
     res.send("Selamat datang di book service manager");

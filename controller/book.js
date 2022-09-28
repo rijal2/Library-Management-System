@@ -1,4 +1,4 @@
-const { addBook, getAllBook, getBookById } = require('../service/books')
+const { addBook, getAllBook, getBookById } = require('../app/service/books')
 
 const create = async (req, res, next) => {
     try {
