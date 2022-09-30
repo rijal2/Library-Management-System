@@ -14,8 +14,11 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
-      password: {
+      hashPassword: {
         type: Sequelize.STRING
+      },
+      status:{
+        type: Sequelize.BOOLEAN,
       },
       roleId: {
         type: Sequelize.INTEGER

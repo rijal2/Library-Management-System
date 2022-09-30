@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      max: 25,
+      min: 3
     }
     }, {
       sequelize,

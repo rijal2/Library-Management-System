@@ -25,12 +25,12 @@ db.sequelize.authenticate()
         console.log('unconect', e);
     })
 
-//Router
-// const v1 = '/v1/be'
-// const booksRouter = require("./router/books")
+// Router
+const v1 = '/v1/be'
+const rolesRouter = require("./app/api/v1/controller/roles/route")
 // const userRouter =require("./router/users")
 
-// app.use(`${v1}`, booksRouter)
+app.use(`${v1}`, rolesRouter)
 // app.use(`${v1}`, userRouter)
 
 app.get('/', (req, res) => {
