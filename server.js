@@ -7,6 +7,7 @@ const corsOptions = {
     origin: "http://localhost:3000"
 }
 const app = express()
+const { CustomAPIError, NotFoundError } = require('./app/errors/exceptions')
 
 
 app.use(morgan('dev'))
@@ -28,15 +29,27 @@ db.sequelize.authenticate()
 // Router
 const v1 = '/v1/be'
 const rolesRouter = require("./app/api/v1/controller/roles/route")
-// const userRouter =require("./router/users")
+const userRouter = require("./app/api/v1/controller/users/route")
 
 app.use(`${v1}`, rolesRouter)
-// app.use(`${v1}`, userRouter)
+app.use(`${v1}`, userRouter)
 
 app.get('/', (req, res) => {
     res.send("Selamat datang di book service manager");
 })
-
+app.use((error, req, res, next) => {
+    if(error instanceof NotFoundError) {
+        console.log("errornya ini", error.message)
+        return res.status(error.StatusCodes).json({
+            success: false,
+            msg: error.message
+       })
+    }
+    return res.status(500).json({
+        success: false,
+        msg: error.message
+    })
+})
 app.listen(`3000`, () => {
     console.log(`Server sedang berjalan di port http://localhost:3000`)
 })

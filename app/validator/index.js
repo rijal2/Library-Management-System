@@ -1,14 +1,11 @@
-const { InvariantError } = require('../errors/exceptions/InvariantError')
 const validator = require('express-joi-validation').createValidator({})
-// const { rolesQuerySchema } = require('./roles')
+const { rolesSchema } = require('./schema/roles')
+const { usersSchema } = require('./schema/users')
 
-// const rolesValidator = () => validator.body(rolesQuerySchema)
-
-const UsersValidator = (payload) => validator.body(payload).
-      
-  
-  
+const rolesValidator = validator.body(rolesSchema)
+const usersValidator = validator.body(usersSchema)
 
 module.exports = {
-    UsersValidator
+    rolesValidator,
+    usersValidator
 }

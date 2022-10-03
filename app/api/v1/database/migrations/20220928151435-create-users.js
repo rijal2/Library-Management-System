@@ -19,12 +19,15 @@ module.exports = {
       },
       status:{
         type: Sequelize.BOOLEAN,
+        allowNull: false,
       },
       roleId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       otp: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

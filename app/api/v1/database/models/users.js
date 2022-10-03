@@ -42,5 +42,10 @@ module.exports = (sequelize, Sequelize) => {
     modelName: 'users',
   })
   
+  Users.associate = function(models){
+    //make assiciate in here
+    Users.belongsTo(models.roles, { as : 'role' })
+  }
+
   return Users;
 };

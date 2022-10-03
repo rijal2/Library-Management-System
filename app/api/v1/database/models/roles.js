@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Roles.associate = function(models){
     //make assiciate in here
-    // Roles.hasMany(models.users, { as : 'users' })
+    Roles.hasMany(models.users, { as : 'users' })
   }
   return Roles;
 };
