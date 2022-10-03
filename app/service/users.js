@@ -1,6 +1,6 @@
 const Model = require('../api/v1/database/models')
 const { users, roles } = Model.sequelize.models
-const { NotFoundError } = require('../errors/exceptions')
+const { NotFoundError, BadRequestError } = require('../errors/exceptions')
 
 const addUser = async (req)=> {
     const { name, email, hashPassword, roleId, status } = req.body
@@ -11,16 +11,83 @@ const addUser = async (req)=> {
     const otp = Math.floor(Math.random() * 9999)
     console.log(otp)
     const result = await users.create({name, email, hashPassword, roleId, status, otp})
-
-    return result
+    
+    const lastResult = await users.findOne({where: {id : result.id}, include: ['role']})
+    return lastResult
 }
 
 const getAllUser = async (req) => {
-    const result = await users.findAll()
+    const result = await users.findAll({
+        include: [{
+            model: roles,
+            as: 'role',
+            attributes: ["id", "name"]
+        }],
+        attributes: ["id", "name", "email", "status"]
+    })
     return result
+}
+
+const getUserByPk = async (req) => {
+    const { id } = req.params
+    const result = await users.findOne({
+        where: {id},
+        include: [{
+            model: roles,
+            as: 'role',
+            attributes: ["id", "name"]
+        }],
+        attributes: ["id", "name", "email", "status"]
+    })
+    
+    if(!result) throw new NotFoundError(`Data dengan id ${id} tidak ditemukan`)
+
+    return result.dataValues
+}
+
+const updateUsers = async (req) => {
+    const { id } = req.params
+    const { name, email, status, roleId } = req.body
+
+    const checkId = await users.findOne({
+        where: {id},
+        include: [{
+            model: roles,
+            as: 'role',
+            attributes: ["id", "name"]
+        }],
+        attributes: ["id", "name", "email", "status"]
+    })
+    const checkEmail = await users.findOne({where: {email}})
+    if(!checkId) throw new NotFoundError(`Data dengan id ${id} tidak ditemukan`)
+    if(checkEmail) throw new BadRequestError(`Email ${email} sudah terdaftar`)
+
+    await checkId.update({name, email, status, roleId})
+    return checkId
+}
+
+const deleteUser = async (req) => {
+    const { id } = req.params
+    const checkId = await users.findOne({
+        where: {id},
+        include: [{
+            model: roles,
+            as: 'role',
+            attributes: ["id", "name"]
+        }],
+        attributes: ["id", "name", "email", "status"]
+    })
+
+    if(!checkId) throw new NotFoundError(`Data dengan id ${id} tidak ditemukan`)
+    await checkId.destroy()
+
+    return checkId
 }
 
 module.exports = {
     addUser,
-    getAllUser
+    getAllUser,
+    getUserByPk,
+    updateUsers,
+    deleteUser
 }

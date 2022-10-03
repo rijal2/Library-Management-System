@@ -7,7 +7,7 @@ const usersSchema = Joi.object({
         hashPassword: Joi.string().min(3).max(25).required(),
         roleId: Joi.number().integer().required(),
         status: Joi.boolean(),
-        otp: Joi.number().integer().required()
+        otp: Joi.number().integer()
 })
 
 
