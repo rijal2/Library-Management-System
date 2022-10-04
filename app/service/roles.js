@@ -1,10 +1,12 @@
 const Model = require('../api/v1/database/models')
 const { roles } = Model.sequelize.models
-const { NotFoundError } = require('../errors/exceptions')
+const { NotFoundError, BadRequestError } = require('../errors/exceptions')
 
 const createRoles = async (req) => {
     const { name } = req.body;
-
+    const checkName = await roles.findOne({where: {name}})
+    if(checkName) throw new BadRequestError(`Role dengan jenis ${name} sudah terdaftar`)
+    
     const result = await roles.create({ name })
     
     return result

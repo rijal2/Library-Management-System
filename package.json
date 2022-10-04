@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate:undo:ll" : "npx sequelize-cli db:migrate:undo:all",
+    "migrate" : "npx sequelize-cli db:migrate"
   },
   "keywords": [],
   "author": "Muchamad Rijal",
