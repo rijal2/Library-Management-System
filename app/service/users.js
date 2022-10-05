@@ -14,6 +14,7 @@ const addUser = async (req)=> {
     const otp = Math.floor(Math.random() * 9999)
     
     const result = await users.create({name, email, hashPassword, roleId, status, otp})
+
     
     const lastResult = await users.findOne({
         where: {id : result.id},
