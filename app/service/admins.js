@@ -17,11 +17,11 @@ const createAdmin = async (req) => {
 }
 
 const deleteAdmin = async (req) => {
-    const { id } = req.body
+    const { id, roleId } = req.body
 
     const checkId = await users.findOne({where: {id}})
     const checkAdmin = await admins.findOne({where: {userId: id}})
-    if(!checkId || !checkAdmin) throw new NotFoundError(`User dengan id ${id} bukan admin`)
+    if(!checkId && checkId.roleId !== 3 || !checkAdmin) throw new NotFoundError(`User dengan id ${id} bukan admin`)
 
     await checkId.destroy()
     await checkAdmin.destroy()
