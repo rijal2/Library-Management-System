@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcrypt')
 module.exports = (sequelize, Sequelize) => {
   const Users = sequelize.define('users',{
     name: {
@@ -38,6 +39,14 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     }
   }, {
+    hooks: {
+      beforeCreate: async (users, option) => {
+        const hashPassword = await bcrypt.hash(users.hashPassword, 12)
+        return users.hashPassword = hashPassword
+      }
+    }
+  },
+  {
     sequelize,
     modelName: 'users',
   })
