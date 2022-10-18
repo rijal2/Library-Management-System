@@ -35,10 +35,12 @@ const v1 = '/v1/be'
 const rolesRouter = require("./app/api/v1/controller/roles/route")
 const userRouter = require("./app/api/v1/controller/users/route")
 const adminRouter = require("./app/api/v1/controller/admin/route")
+const authRouter = require("./app/api/v1/controller/auth/route")
 
 app.use(`${v1}`, rolesRouter)
 app.use(`${v1}`, userRouter)
 app.use(`${v1}`, adminRouter)
+app.use(`${v1}`, authRouter)
 
 app.get('/', (req, res) => {
     res.send("Selamat datang di book service manager");

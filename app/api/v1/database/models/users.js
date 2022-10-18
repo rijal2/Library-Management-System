@@ -57,5 +57,10 @@ module.exports = (sequelize, Sequelize) => {
     Users.hasMany(models.admins, {as: 'admin'})
   }
 
+  // Users.comparePassword = async function (candidatePassword) {
+  //   const isMatch = await bcrypt.compare(candidatePassword, this.hashPassword);
+  //   return isMatch;
+  // }
+
   return Users;
 };
