@@ -16,6 +16,11 @@ const createAdmin = async (req) => {
     return admin
 }
 
+const addAdmin = async (req) => {
+    const { id } = req.params;
+    const { publisher } = req.user.admin
+}
+
 const deleteAdmin = async (req) => {
     const { id, roleId } = req.body
 

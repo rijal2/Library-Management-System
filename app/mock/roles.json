@@ -1,0 +1,14 @@
+[
+    {
+        "name": "owner"
+    },
+    {
+        "name": "publisher"
+    },
+    {
+        "name": "admin"
+    },
+    {
+        "name": "participant"
+    }
+]

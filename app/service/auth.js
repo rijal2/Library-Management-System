@@ -33,7 +33,6 @@ const signin = async (req) => {
         result.dataValues.publisher = "-"
     }
 
-
     const token = createJwt({ payload: createTokenUser(result.dataValues) })
 
     return token

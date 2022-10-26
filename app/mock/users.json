@@ -1,0 +1,66 @@
+
+[
+    {
+        "name": "OWNER",
+        "email": "puasdigipreneur@gmail.com",
+        "hashPassword": "ownerpuas",
+        "roleId": 1,
+        "status": "true"    
+    },
+    {
+        "name": "PT. Ha & Za",
+        "email": "merentas5benua27@gmail.com",
+        "hashPassword": "ptha&za",
+        "roleId": 2,
+        "status": "true"    
+    },
+    {
+        "name": "CV. PrismaInti Edukasi",
+        "email": "sendiri676@gmail.com",
+        "hashPassword": "prismaintiedukasi",
+        "roleId": 2,
+        "status": "true"    
+    },
+    {
+        "name": "Admin 1 PT. Ha & Za",
+        "email": "untukform231@gmail.com",
+        "hashPassword": "admin1ptha&za",
+        "roleId": 3,
+        "status": "true"    
+    },
+    {
+        "name": "Admin 2 PT. Ha & Za",
+        "email": "admin2ptha&za@gmail.com",
+        "hashPassword": "admin2ptha&za",
+        "roleId": 3,
+        "status": "true"    
+    },
+    {
+        "name": "Admin 1 CV. PIE",
+        "email": "indahpasutri24@gmail.com",
+        "hashPassword": "admin1cvpie",
+        "roleId": 3,
+        "status": "true"    
+    },
+    {
+        "name": "Admin 2 CV. PIE",
+        "email": "admin2cvha&za@gmail.com",
+        "hashPassword": "admin2cvha&za",
+        "roleId": 3,
+        "status": "true"    
+    },
+    {
+        "name": "Participant 1",
+        "email": "hajarjateng@gmail.com",
+        "hashPassword": "participant1",
+        "roleId": 4,
+        "status": "true" 
+    },
+    {
+        "name": "Participant 2",
+        "email": "belajaronlinekpm@gmail.com",
+        "hashPassword": "participant2",
+        "roleId": 4,
+        "status": "true" 
+    }
+]
