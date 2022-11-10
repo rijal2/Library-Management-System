@@ -1,19 +1,31 @@
 const Model = require('../api/v1/database/models')
 const { admins, users } = Model.sequelize.models
-const { NotFoundError, BadRequestError } = require('../errors/exceptions')
+const { NotFoundError, BadRequestError, UnauthorizedError } = require('../errors/exceptions')
 
 const createAdmin = async (req) => {
-    const { name, email, hashPassword, status, publisher} = req.body;
-
+    const { name, email, password, status} = req.body;
+    const { role } = req.user;
+    console.log("roleId = " + role)
+    console.log("req.user.userId = " + req.user.id)
+    if(role !== 2) throw new UnauthorizedError("Anda tidak punya ijin untuk membuat admin")
     const checkEmail = await users.findOne({where: {email}})
     if(checkEmail) throw new BadRequestError(`Email ${email} sudah terdaftar. Silahkan login disini`)
     
     const otp = Math.floor(Math.random() * 9999)
+    console.log("otp = " + otp)
     
-    const result = await users.create({name, email, hashPassword, roleId: 3, status, otp})
-    const admin = await admins.create({name, userId: result.id, userPublisher: publisher})
+    const result = await users.create({name, email, hashPassword: password, roleId: 3, status, otp})
+    const admin = await admins.create({name, userId: result.id, userPublisher: req.user.id})
     
-    return admin
+    const obj = {
+        id: result.id,
+        name: result.name,
+        email: result.email,
+        roleId: result.roleId,
+        status: result.status,
+        admin
+    }
+    return obj
 }
 
 const addAdmin = async (req) => {

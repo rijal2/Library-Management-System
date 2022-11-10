@@ -36,6 +36,13 @@
         "status": "true"    
     },
     {
+        "name": "Admin 3 PT. Ha & Za",
+        "email": "admin3ptha&za@gmail.com",
+        "hashPassword": "admin3ptha&za",
+        "roleId": 3,
+        "status": "true"    
+    },
+    {
         "name": "Admin 1 CV. PIE",
         "email": "indahpasutri24@gmail.com",
         "hashPassword": "admin1cvpie",
