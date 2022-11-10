@@ -33,6 +33,33 @@ const addAdmin = async (req) => {
     const { publisher } = req.user.admin
 }
 
+const getAllAdmin = async (req) => {
+    const { id, role } = req.user;
+
+    let result;
+    if( role === 2){
+        result = await admins.findAll({where: {userPublisher: id}, attributes: ["id", "name", "userId"]})
+    }
+    if( role === 1){
+        result = await admins.findAll({
+            attributes: ["id", "name", "userId", "userPublisher"],
+            include: [
+                {
+                    model: users,
+                    as: "detailUserPublisher",
+                    foreignKey: 'userPublisher',
+                    attributes: [
+                        "id", "name", "email"
+                    ]
+                }
+            ]
+        })
+        
+    }
+
+    return result
+}
+
 const deleteAdmin = async (req) => {
     const { id, roleId } = req.body
 
@@ -48,5 +75,6 @@ const deleteAdmin = async (req) => {
 
 module.exports = {
     createAdmin,
-    deleteAdmin
+    deleteAdmin,
+    getAllAdmin
 }
