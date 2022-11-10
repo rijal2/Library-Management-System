@@ -1,4 +1,4 @@
-const { createAdmin, deleteAdmin, getAllAdmin } = require('../../../../service/admins')
+const { createAdmin, deleteAdmin, getAllAdmin, getAdminByid } = require('../../../../service/admins')
 const { StatusCodes } = require('http-status-codes')
 
 const create = async (req, res, next) => {
@@ -25,6 +25,18 @@ const index = async (req, res, next) => {
     }
 }
 
+const find = async (req, res, next) => {
+    try {
+        const result = await getAdminByid(req)
+        res.status(StatusCodes.OK).json({
+            success: true,
+            data: result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 const destroy = async (req, res, next) => {
     try {
         const result = await deleteAdmin(req)
@@ -40,5 +52,6 @@ const destroy = async (req, res, next) => {
 module.exports = {
     create,
     destroy,
-    index
+    index,
+    find
 }

@@ -60,6 +60,53 @@ const getAllAdmin = async (req) => {
     return result
 }
 
+const getAdminByid = async (req) => {
+    const { idAdmin } = req.params
+    const { id, role } = req.user;
+    console.log("idAdmin ==> " + idAdmin)
+    console.log("id ==> " + id)
+    let result;
+    if( role === 2){
+        const admin = await admins.findOne({
+            where: {userPublisher: id, id: idAdmin},
+            attributes: ["id", "userId", "userPublisher"],
+            include: [
+                {
+                    model: users,
+                    as: "detailUserAdmin",
+                    foreignKey: 'userId',
+                    attributes: [
+                        "id", "name", "email"
+                    ]
+                }
+            ]
+        })
+        if(!admin) throw new NotFoundError("Admin yang anda cari tidak ditemukan")
+        result = admin
+    }
+    if( role === 1){
+        const admin = await admins.findOne({
+            where: {id: idAdmin},
+            attributes: ["id", "name", "userId", "userPublisher"],
+            include: [
+                {
+                    model: users,
+                    as: "detailUserPublisher",
+                    foreignKey: 'userPublisher',
+                    attributes: [
+                        "id", "name", "email"
+                    ]
+                }
+            ]
+        })
+        if(!admin) throw new NotFoundError("Admin yang anda cari tidak ditemukan")
+        result = admin
+        
+    }
+
+    return result
+}
+
 const deleteAdmin = async (req) => {
     const { id, roleId } = req.body
 
@@ -76,5 +123,6 @@ const deleteAdmin = async (req) => {
 module.exports = {
     createAdmin,
     deleteAdmin,
-    getAllAdmin
+    getAllAdmin,
+    getAdminByid
 }

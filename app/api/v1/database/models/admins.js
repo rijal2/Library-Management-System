@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Admins.associate = function(models){
     //make assiciate in here
     Admins.belongsTo(models.users, { foreignKey: 'userPublisher', as : 'detailUserPublisher' })
+    Admins.belongsTo(models.users, { foreignKey: 'userId', as : 'detailUserAdmin' })
   }
   return Admins;
 };
