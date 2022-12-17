@@ -22,26 +22,22 @@ const signin = async (req) => {
     const checkEmail = await users.findOne({
         where: {email},
         attributes: ["id", "name", "email", "status", "roleId", "hashPassword"],
-        
+        include: [
+            {
+                model: roles,
+                as: 'roles',
+                attributes: ['role']
+            }
+        ]
     })
-    console.log("result.dataValues ===>>> " + checkEmail);
-    if(!checkEmail) throw new UnauthorizedError('Email atau Password tidak sesuai')
-    
-    // const check = await comparePassword(password, checkEmail.hashPassword)
-    const check = await users.checkPwd(password)
+
+    if(!checkEmail) throw new UnauthorizedError('Email tidak sesuai')
+    if(checkEmail.status == "tidak aktif") throw new BadRequestError('Akun Anda sudah tidak aktif. Kami telah mengirim OTP untuk memulihkan akun Anda. Silahkan cek email Anda')
+    console.log(checkEmail.dataValues)
+    const check = await users.prototype.checkPwd(password, checkEmail.hashPassword)
     if(!check) throw new UnauthorizedError('Password Salah')
 
-    const role = await roles.findOne({where: {id: checkEmail.roleId}, attributes: ["id", "name"]})
-    
-    let result = { ...checkEmail}
-    if(checkEmail.roleId === 3) {
-        // const check = await admins.findOne({where: {userId: checkEmail.id}})
-        result.dataValues.publisher = role
-    } else {
-        result.dataValues.publisher = "-"
-    }
-
-    const token = createJwt({ payload: createTokenUser(result.dataValues) })
+    const token = createJwt({ payload: createTokenUser(checkEmail.dataValues) })
 
     return token
 }

@@ -1,10 +1,10 @@
-const { addUser, getAllUser, getUserByPk, updateUsers, deleteUser } = require('../../../../service/users')
+const { addPublisherByOwner, getAllUser, getUserByPk, updateUsers, deleteUser } = require('../../../../service/users')
 const { StatusCodes } = require('http-status-codes')
 
-const createUser = async (req, res, next) => {
+const createPublisherByOwner = async (req, res, next) => {
     console.log(req.body.name)
     try {
-        const result = await addUser(req)
+        const result = await addPublisherByOwner(req)
 
         res.status(StatusCodes.CREATED).json({
             success: true,
@@ -64,7 +64,7 @@ const destroy = async (req, res, next) => {
 }
 
 module.exports = {
-    createUser,
+    createPublisherByOwner,
     index,
     find,
     updateUser,

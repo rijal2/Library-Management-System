@@ -13,10 +13,6 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: {
-      //   args: [ true ],
-      //   msg: 'Nama sudah terdaftar'
-      // },
       validate: {
         notNull: {
           args: [ true ],
@@ -34,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      // unique: true,
       validate: {
         notNull: {
           args: [ true ],
@@ -51,10 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       unique: {
         msg: `Email sudah terdaftar`
       }
-      // unique: {
-      //   args: true,
-      //   msg: 'Email sudah terdaftar'
-      // }, //Unique gak work. So validasinya di 'service' aja
     },
     hashPassword: {
       type: DataTypes.STRING,
@@ -126,8 +117,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
 
-  users.prototype.checkPwd = async function (candidatePassword){
-    const result = await bycript.compare(candidatePassword, this.hashPassword)
+  users.prototype.checkPwd = async function (candidatePassword, hashPassword){
+    const result = await bcrypt.compare(candidatePassword, hashPassword)
     return result
   }
 

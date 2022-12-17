@@ -2,29 +2,30 @@ const Model = require('../api/v1/database/models')
 const { users, roles } = Model.sequelize.models
 const { NotFoundError, BadRequestError } = require('../errors/exceptions')
 
-const addUser = async (req)=> {
+const addPublisherByOwner = async (req)=> {
     const { name, email, hashPassword, roleId, status } = req.body
-    
     const otp = Math.floor(Math.random() * 9999)
     
-    const [checkEmail, role ] = await Promise.all(
+    const [role] = await Promise.all(
         [
-            // users.findOne({where: {email}}),
             roles.findOne({where: {id: roleId}})
         ]
     )
-    // if(checkEmail) throw new BadRequestError(`Email ${email} sudah terdaftar. Silahkan login disini`)    
-    // if(!role) throw new BadRequestError(`Email ${email} sudah terdaftar. Silahkan login disini`)    
-
+    
     const create = await users.create({ name, email, hashPassword, roleId: parseInt(roleId), status, otp})
         
     const result = {
+        id: create.id,
         name: create.name,
         email: create.email,
         status: create.status,
-        // role: role.role
+        role: role.role
     }
     return result
+}
+
+const addAdminByOwner = async (req) => {
+
 }
 
 const getAllUser = async (req) => {
@@ -96,7 +97,7 @@ const deleteUser = async (req) => {
 }
 
 module.exports = {
-    addUser,
+    addPublisherByOwner,
     getAllUser,
     getUserByPk,
     updateUsers,
