@@ -2,22 +2,39 @@
 const {
   Model
 } = require('sequelize');
+const users = require('./users');
 module.exports = (sequelize, DataTypes) => {
-  const Roles = sequelize.define('roles', {
-    name: {
+  const roles = sequelize.define('roles', {
+    role: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
-      max: 25,
-      min: 3
-    }
-    }, {
-      sequelize,
-      modelName: 'roles',
-    });
+      validate: {
+        notNull: {
+          args: [ true ],
+          msg: "nama role tidak boleh Null"
+        },
+        notEmpty: {
+          args: [ true ],
+          msg: "nama role tidak boleh kosong"
+        },
+        len: {
+          args: [3, 11],
+          msg: "nama role harus memiliki jumlah karakter antara 3 - 11"
+        },
+        isIn: {
+          args: [[ 'owner', 'admin', 'publisher', 'participant']],
+          defaultValue: 'participant',
+          msg: 'Silahkan pilih sessuai abcd berikut'
+        }
+      }
 
-  Roles.associate = function(models){
-    //make assiciate in here
-    Roles.hasMany(models.users, { as : 'users' })
+    }
+  })
+
+  roles.associate = function(models){
+    roles.hasMany(models.users, { as: 'Detail Users'})
+
   }
-  return Roles;
+  return roles;
 };

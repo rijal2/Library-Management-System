@@ -1,19 +1,28 @@
-const Model = require('../api/v1/database/models')
-const { roles } = Model.sequelize.models
+const Model = require('../api/v1/database/models');
+// const users = require('../api/v1/database/models/users');
+const { roles, users } = Model.sequelize.models
 const { NotFoundError, BadRequestError } = require('../errors/exceptions')
 
 const createRoles = async (req) => {
-    const { name } = req.body;
-    const checkName = await roles.findOne({where: {name}})
-    if(checkName) throw new BadRequestError(`Role dengan jenis ${name} sudah terdaftar`)
+    const { role } = req.body;
+    const checkName = await roles.findOne({where: {role}})
+    if(checkName) throw new BadRequestError(`Role dengan jenis ${role} sudah terdaftar`)
     
-    const result = await roles.create({ name })
+    const result = await roles.create({ role })
     
     return result
 }
 
 const getAllRoles = async (req) => {
-    const result = await roles.findAll()
+    const result = await roles.findAll({
+        include: [
+            {
+                model: users,
+                as: 'Detail Users',
+                attributes: [ 'id', 'role' ]
+            }
+        ]
+    })
     return result
 }
 

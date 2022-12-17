@@ -29,8 +29,9 @@ const createAdmin = async (req) => {
 }
 
 const addAdmin = async (req) => {
-    const { id } = req.params;
-    const { publisher } = req.user.admin
+    const { idAdmin } = req.params
+    const { id, role } = req.user;
+    
 }
 
 const getAllAdmin = async (req) => {
@@ -63,8 +64,7 @@ const getAllAdmin = async (req) => {
 const getAdminByid = async (req) => {
     const { idAdmin } = req.params
     const { id, role } = req.user;
-    console.log("idAdmin ==> " + idAdmin)
-    console.log("id ==> " + id)
+
     let result;
     if( role === 2){
         const admin = await admins.findOne({
@@ -87,8 +87,16 @@ const getAdminByid = async (req) => {
     if( role === 1){
         const admin = await admins.findOne({
             where: {id: idAdmin},
-            attributes: ["id", "name", "userId", "userPublisher"],
+            attributes: ["id", "userId", "userPublisher"],
             include: [
+                {
+                    model: users,
+                    as: "detailUserAdmin",
+                    foreignKey: 'userId',
+                    attributes: [
+                        "id", "name", "email"
+                    ]
+                },
                 {
                     model: users,
                     as: "detailUserPublisher",

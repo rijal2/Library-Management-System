@@ -2,6 +2,7 @@ const { addUser, getAllUser, getUserByPk, updateUsers, deleteUser } = require('.
 const { StatusCodes } = require('http-status-codes')
 
 const createUser = async (req, res, next) => {
+    console.log(req.body.name)
     try {
         const result = await addUser(req)
 

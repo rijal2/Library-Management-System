@@ -4,36 +4,35 @@ const { NotFoundError, BadRequestError } = require('../errors/exceptions')
 
 const addUser = async (req)=> {
     const { name, email, hashPassword, roleId, status } = req.body
-
-    const checkRole = await roles.findOne({where: {id: roleId}})
-    if(!checkRole) throw new NotFoundError(`Role dengan id ${roleId} tidak ditemukan`)
-
-    const checkEmail = await users.findOne({where: {email}})
-    if(checkEmail) throw new NotFoundError(`Email ${email} sudah terdaftar. Silahkan login disini`)
     
     const otp = Math.floor(Math.random() * 9999)
     
-    const result = await users.create({name, email, hashPassword, roleId, status, otp})
+    const [checkEmail, role ] = await Promise.all(
+        [
+            // users.findOne({where: {email}}),
+            roles.findOne({where: {id: roleId}})
+        ]
+    )
+    // if(checkEmail) throw new BadRequestError(`Email ${email} sudah terdaftar. Silahkan login disini`)    
+    // if(!role) throw new BadRequestError(`Email ${email} sudah terdaftar. Silahkan login disini`)    
 
-    
-    const lastResult = await users.findOne({
-        where: {id : result.id},
-        include: [{
-            model: roles,
-            as: 'role',
-            attributes: ["id", "name"]
-        }],
-        attributes: ["id", "name", "email", "status"]
-    })
-    return lastResult
+    const create = await users.create({ name, email, hashPassword, roleId: parseInt(roleId), status, otp})
+        
+    const result = {
+        name: create.name,
+        email: create.email,
+        status: create.status,
+        // role: role.role
+    }
+    return result
 }
 
 const getAllUser = async (req) => {
     const result = await users.findAll({
         include: [{
             model: roles,
-            as: 'role',
-            attributes: ["id", "name"]
+            as: 'roles',
+            attributes: ["id", "role"]
         }],
         attributes: ["id", "name", "email", "status"]
     })

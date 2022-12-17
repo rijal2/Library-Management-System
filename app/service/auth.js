@@ -27,7 +27,8 @@ const signin = async (req) => {
     console.log("result.dataValues ===>>> " + checkEmail);
     if(!checkEmail) throw new UnauthorizedError('Email atau Password tidak sesuai')
     
-    const check = await comparePassword(password, checkEmail.hashPassword)
+    // const check = await comparePassword(password, checkEmail.hashPassword)
+    const check = await users.checkPwd(password)
     if(!check) throw new UnauthorizedError('Password Salah')
 
     const role = await roles.findOne({where: {id: checkEmail.roleId}, attributes: ["id", "name"]})

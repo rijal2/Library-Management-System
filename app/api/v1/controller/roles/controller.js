@@ -2,6 +2,7 @@ const { createRoles, getAllRoles, getRolesByPk, deleteRoles, updateRoles } = req
 const { StatusCodes } = require('http-status-codes')
 
 const create = async (req, res, next) => {
+    
  try {
     const result = await createRoles(req)
 

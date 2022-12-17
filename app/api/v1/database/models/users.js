@@ -2,65 +2,142 @@
 const {
   Model
 } = require('sequelize');
-const bcrypt = require('bcrypt')
-module.exports = (sequelize, Sequelize) => {
-  const Users = sequelize.define('users',{
+
+const bcrypt = require('bcrypt');
+const roles = require('./roles');
+
+module.exports = (sequelize, DataTypes) => {
+  const users = sequelize.define(
+    'users',
+    {
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
+      // unique: {
+      //   args: [ true ],
+      //   msg: 'Nama sudah terdaftar'
+      // },
       validate: {
-        customValidator(value) {
-          if (value.length <= 3 || value.length >= 25) {
-            throw new Error("name min. 3 character and max. 25 character");
-          }
-        }
+        notNull: {
+          args: [ true ],
+          msg: "nama User tidak boleh Null"
+        },
+        notEmpty: {
+          msg: 'nama tidak boleh kosong'
+        },
+        len: {
+          args: [5, 50],
+          msg: "nama User harus memiliki jumlah karakter antara min. 5 karakter dan max. 50 karakter"
+        },
       }
     },
     email: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      isEmail: true
+      // unique: true,
+      validate: {
+        notNull: {
+          args: [ true ],
+          msg: "Email tidak boleh Null"
+        },
+        notEmpty: {
+          msg: 'Email tidak boleh kosong'
+        },
+        isEmail: {
+          args: [ true ],
+          msg: "Gunakan format email yang benar. example@gmail.com"
+        }
+      },
+      unique: {
+        msg: `Email sudah terdaftar`
+      }
+      // unique: {
+      //   args: true,
+      //   msg: 'Email sudah terdaftar'
+      // }, //Unique gak work. So validasinya di 'service' aja
     },
     hashPassword: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          args: [ true ],
+          msg: "Password tidak boleh Null"
+        },
+        notEmpty: {
+          msg: 'Password tidak boleh kosong'
+        },
+        len: {
+          args: [5, 30],
+          msg: "Password minimal 5 karakter dan maksimal 30 karakter"
+        },
+      }
     },
-    status:{
-      type: Sequelize.BOOLEAN,
+    status: {
+      type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          args: [ true ],
+          msg: "Status tidak boleh Null"
+        },
+        notEmpty: {
+          msg: 'Status tidak boleh kosong'
+        },
+        isIn: {
+          args: [ 'aktif', 'tidak aktif' ],
+          defaultValue: 'tidak aktif',
+          msg: "Tentukan Status user sesuai dengan pilihan yang kami sediakan"
+        }
+      }
     },
     roleId: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.NUMBER,
+      foreignKey: true,
       allowNull: false,
+      validate: {
+        notNull: {
+          args: [ true ],
+          msg: "Role Id tidak boleh Null"
+        },
+        notEmpty: {
+          msg: 'Role Id tidak boleh kosong'
+        },
+        isIn: {
+          args: [ [2, 3, 4]],
+          defaultValue: 3,
+          msg: 'Silahkan Role pilih sessuai abcd berikut'
+        }
+
+      },
     },
-    otp: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    }
-  }, {
-    hooks: {
-      beforeCreate: async (users, option) => {
-        const hashPassword = await bcrypt.hash(users.hashPassword, 12)
-        return users.hashPassword = hashPassword
+    otp: DataTypes.STRING
+    },
+    {
+      hooks: {
+        beforeCreate: async (users) => {
+         if (users.hashPassword) {
+          const salt = await bcrypt.genSaltSync(10, 'a');
+          const pwd = bcrypt.hashSync(users.hashPassword, salt);
+          users.hashPassword = pwd;
+          }
+        }
       }
     }
-  },
-  {
-    sequelize,
-    modelName: 'users',
-  })
-  
-  Users.associate = function(models){
-    //make assiciate in here
-    Users.belongsTo(models.roles, { foreignKey: 'roleId', as : 'role' })
-    Users.hasMany(models.admins, {as: 'admin'})
+  )
+
+  users.prototype.checkPwd = async function (candidatePassword){
+    const result = await bycript.compare(candidatePassword, this.hashPassword)
+    return result
   }
 
-  // Users.comparePassword = async function (candidatePassword) {
-  //   const isMatch = await bcrypt.compare(candidatePassword, this.hashPassword);
-  //   return isMatch;
-  // }
+  users.associate = function(models){
+    users.belongsTo(models.roles, {
+      foreignKey: 'roleId',
+      as: 'roles'
+    })
 
-  return Users;
+  }
+  
+  return users;
 };
