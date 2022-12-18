@@ -24,6 +24,27 @@ const addPublisherByOwner = async (req)=> {
     return result
 }
 
+const setStatusUsers = async (req) => {
+    const { id, status } = req.params;
+    
+    let newStatus;
+
+    if( status == "aktif" ){
+        newStatus = 'tidak aktif'
+
+    } else if (status == "tidak-aktif"){
+        newStatus = 'aktif'
+
+    } else {
+        throw new BadRequestError('Salah input status user')
+    }
+    
+    await users.update( { status: newStatus }, { where: {id} })
+    const result = await users.findOne({where: {id}})
+
+    return result
+}
+
 const addAdminByOwner = async (req) => {
 
 }
@@ -46,8 +67,8 @@ const getUserByPk = async (req) => {
         where: {id},
         include: [{
             model: roles,
-            as: 'role',
-            attributes: ["id", "name"]
+            as: 'roles',
+            attributes: ["id", "role"]
         }],
         attributes: ["id", "name", "email", "status"]
     })
@@ -84,10 +105,9 @@ const deleteUser = async (req) => {
         where: {id},
         include: [{
             model: roles,
-            as: 'role',
-            attributes: ["id", "name"]
-        }],
-        attributes: ["id", "name", "email", "status"]
+            as: 'roles',
+            attributes: ["id", "role"]
+        }]
     })
 
     if(!checkId) throw new NotFoundError(`Data dengan id ${id} tidak ditemukan`)
@@ -98,8 +118,9 @@ const deleteUser = async (req) => {
 
 module.exports = {
     addPublisherByOwner,
+    setStatusUsers,
+    deleteUser,
     getAllUser,
     getUserByPk,
     updateUsers,
-    deleteUser
 }

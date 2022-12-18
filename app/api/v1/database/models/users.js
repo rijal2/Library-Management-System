@@ -76,8 +76,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Status tidak boleh kosong'
         },
         isIn: {
-          args: [ 'aktif', 'tidak aktif' ],
-          defaultValue: 'tidak aktif',
+          args: [ [ 'aktif', 'tidak aktif' ] ],
+          // defaultValue: 'tidak aktif',
           msg: "Tentukan Status user sesuai dengan pilihan yang kami sediakan"
         }
       }
